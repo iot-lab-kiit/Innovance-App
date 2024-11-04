@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Arrays;
 import java.util.List;
 
 @Data
@@ -20,14 +21,22 @@ public class Level {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     
-    private String category; //question
+    private String question;
+    private int levelNo;
     
     @ManyToOne
     @JoinColumn(name = "domain_id", nullable = false)
     private Domain domain;
     
-    @OneToMany(mappedBy = "level", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Option> options;
+    private String options;
     
+    
+    
+    public List<String> getOptions() {
+        return options != null ? Arrays.asList(options.split(",")) : null;
+    }
+    
+    public void setOptions(List<String> options) {
+        this.options = String.join(",", options);
+    }
 }
-

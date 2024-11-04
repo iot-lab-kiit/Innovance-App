@@ -6,6 +6,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Arrays;
+import java.util.List;
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -26,12 +29,15 @@ public class UserChoice {
     @JoinColumn(name = "level_id", nullable = false)
     private Level level;
     
-    @ManyToOne
-    @JoinColumn(name = "option_id", nullable = false)
-    private Option chosenOption;
+    private String selected;
     
-    @ManyToOne
-    @JoinColumn(name = "domain_id", nullable = false)
-    private Domain domain;
+    
+    
+    public List<String> getSelected() {
+        return selected != null ? Arrays.asList(selected.split(",")) : null;
+    }
+    
+    public void setSelected(List<String> selected) {
+        this.selected = String.join(",", selected);
+    }
 }
-

@@ -21,7 +21,9 @@ public class User {
     private int id;
     
     private String name;
+    private String rollno;
     
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<UserChoice> choices;
+    @ManyToOne
+    @JoinColumn(name = "domain_id")
+    private Domain domain;
 }

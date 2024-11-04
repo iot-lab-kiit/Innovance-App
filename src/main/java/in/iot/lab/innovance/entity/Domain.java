@@ -25,4 +25,3 @@ public class Domain {
     @OneToMany(mappedBy = "domain", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Level> levels;
 }
-
