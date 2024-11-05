@@ -22,14 +22,14 @@ public class UserLevelChoice {
 
     @ManyToOne(
             fetch = FetchType.EAGER,
-            cascade = CascadeType.ALL
+            cascade = {CascadeType.REFRESH, CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST}
     )
     @JoinColumn(name = "user_id")
     private User user;
 
     @ManyToOne(
             fetch = FetchType.EAGER,
-            cascade = CascadeType.ALL
+            cascade = {CascadeType.REFRESH, CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST}
     )
     @JoinColumn(name = "level_id")
     private Level level;

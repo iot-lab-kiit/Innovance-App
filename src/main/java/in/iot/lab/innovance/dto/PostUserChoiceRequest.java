@@ -1,7 +1,6 @@
 package in.iot.lab.innovance.dto;
 
 
-import in.iot.lab.innovance.entity.Level;
 import lombok.*;
 
 @Getter
@@ -10,9 +9,8 @@ import lombok.*;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserLevelChoiceDTO {
-    private Integer id;
-    private UserDTO user;
-    private Level level;
+public class PostUserChoiceRequest {
+    private Integer userId;
+    private Integer levelId;
     private Integer selected;
 }

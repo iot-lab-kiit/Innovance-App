@@ -2,6 +2,7 @@ package in.iot.lab.innovance.controller;
 
 
 import in.iot.lab.innovance.constants.UrlConstants;
+import in.iot.lab.innovance.dto.PostUserChoiceRequest;
 import in.iot.lab.innovance.dto.UserLevelChoiceDTO;
 import in.iot.lab.innovance.service.UserLevelChoiceService;
 import lombok.RequiredArgsConstructor;
@@ -18,9 +19,9 @@ public class UserLevelChoiceController {
 
     @PostMapping(UrlConstants.CREATE_USER_LEVEL_CHOICE)
     public ResponseEntity<UserLevelChoiceDTO> createUserLevelChoiceHandler(
-            @RequestBody UserLevelChoiceDTO userLevelChoiceDTO
+            @RequestBody PostUserChoiceRequest postUserChoiceRequest
     ) {
-        UserLevelChoiceDTO created = service.createUserLevelChoice(userLevelChoiceDTO);
+        UserLevelChoiceDTO created = service.createUserLevelChoice(postUserChoiceRequest);
         return ResponseEntity.ok(created);
     }
 
