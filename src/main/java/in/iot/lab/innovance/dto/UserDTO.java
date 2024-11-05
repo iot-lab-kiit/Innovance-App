@@ -14,6 +14,7 @@ public class UserDTO {
     private Integer id;
     private String name;
     private String rollNo;
+    private Integer domainId;
 
     public User toUser() {
         return User

@@ -39,6 +39,7 @@ public class User {
                 .id(id)
                 .name(name)
                 .rollNo(rollNo)
+                .domainId(domain != null ? domain.getId() : null)
                 .build();
     }
 }

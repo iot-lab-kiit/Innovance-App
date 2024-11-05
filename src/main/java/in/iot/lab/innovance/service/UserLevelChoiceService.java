@@ -6,6 +6,7 @@ import in.iot.lab.innovance.dto.UserLevelChoiceDTO;
 import in.iot.lab.innovance.entity.Level;
 import in.iot.lab.innovance.entity.User;
 import in.iot.lab.innovance.entity.UserLevelChoice;
+import in.iot.lab.innovance.exception.InvalidLevel;
 import in.iot.lab.innovance.exception.LevelNotFound;
 import in.iot.lab.innovance.exception.UserLevelChoiceNotFound;
 import in.iot.lab.innovance.exception.UserNotFound;
@@ -33,6 +34,10 @@ public class UserLevelChoiceService {
         Level level = levelRepo
                 .findById(postUserChoiceRequest.getLevelId())
                 .orElseThrow(() -> new LevelNotFound(postUserChoiceRequest.getLevelId()));
+
+        // Checking if the Level is present in the Domain or not
+        if (!user.getDomain().getLevels().contains(level))
+            throw new InvalidLevel(user.getId(), user.getDomain().getId(), level.getId());
 
         UserLevelChoice newUserLevelChoice = UserLevelChoice
                 .builder()
