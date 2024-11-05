@@ -12,8 +12,8 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Object> handleGlobalException(Exception exception) {
         return ResponseEntity
-                .internalServerError()
-                .build();
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(exception.getMessage());
     }
 
     @ExceptionHandler(UserNotFound.class)
