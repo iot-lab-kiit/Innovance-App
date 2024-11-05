@@ -1,6 +1,7 @@
 package in.iot.lab.innovance.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import in.iot.lab.innovance.dto.UserDTO;
 import jakarta.persistence.*;
 import lombok.*;
@@ -31,6 +32,7 @@ public class User {
             fetch = FetchType.EAGER
     )
     @JoinColumn(name = "domain_id")
+    @JsonIgnore
     private Domain domain;
 
     public UserDTO toUserDTO() {
@@ -39,6 +41,7 @@ public class User {
                 .id(id)
                 .name(name)
                 .rollNo(rollNo)
+                .domainId(domain != null ? domain.getId() : null)
                 .build();
     }
 }

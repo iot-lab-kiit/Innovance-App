@@ -38,12 +38,14 @@ public class UserLevelChoice {
     private Integer selected;
 
     public UserLevelChoiceDTO toUserLevelChoiceDto() {
+        String domainName = user.getDomain() != null ? user.getDomain().getName() : null;
         return UserLevelChoiceDTO
                 .builder()
                 .id(id)
                 .user(user.toUserDTO())
                 .level(level)
                 .selected(selected)
+                .domainName(domainName)
                 .build();
     }
 }
