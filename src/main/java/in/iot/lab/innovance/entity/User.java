@@ -1,29 +1,44 @@
 package in.iot.lab.innovance.entity;
 
+
+import in.iot.lab.innovance.dto.UserDTO;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-import java.util.List;
-
-@Data
+@Getter
+@Setter
 @Builder
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "user")
+@Table(name = "USER_DB")
 public class User {
-    
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
-    
+    @GeneratedValue
+    @Column(name = "id")
+    private Integer id;
+
+    @Column(name = "name")
     private String name;
-    private String rollno;
-    
-    @ManyToOne
+
+    @Column(name = "roll_no", unique = true)
+    private String rollNo;
+
+    @ManyToOne(
+            cascade = {CascadeType.REFRESH, CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST},
+            fetch = FetchType.EAGER
+    )
     @JoinColumn(name = "domain_id")
     private Domain domain;
+
+    public UserDTO toUserDTO() {
+        return UserDTO
+                .builder()
+                .id(id)
+                .name(name)
+                .rollNo(rollNo)
+                .build();
+    }
 }

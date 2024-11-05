@@ -1,27 +1,33 @@
 package in.iot.lab.innovance.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-import java.util.List;
+import java.util.Set;
 
-@Data
+@Getter
+@Setter
 @Builder
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "domain")
+@Table(name = "DOMAIN_DB")
 public class Domain {
-    
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
-    
+    @GeneratedValue
+    @Column(name = "id")
+    private Integer id;
+
+    @Column(name = "name", unique = true)
     private String name;
-    
-    @OneToMany(mappedBy = "domain", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Level> levels;
+
+    @OneToMany(
+            fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    @JoinColumn(name = "domain_id")
+    private Set<Level> levels;
 }

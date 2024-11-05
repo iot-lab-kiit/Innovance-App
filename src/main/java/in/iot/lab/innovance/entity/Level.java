@@ -1,42 +1,31 @@
 package in.iot.lab.innovance.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-import java.util.Arrays;
 import java.util.List;
 
-@Data
+@Getter
+@Setter
 @Builder
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "level")
+@Table(name = "LEVEL_DB")
 public class Level {
-    
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
-    
+    @GeneratedValue
+    @Column(name = "id")
+    private Integer id;
+
+    @Column(name = "level_no")
+    private Integer levelNo;
+
+    @Column(name = "question")
     private String question;
-    private int levelNo;
-    
-    @ManyToOne
-    @JoinColumn(name = "domain_id", nullable = false)
-    private Domain domain;
-    
-    private String options;
-    
-    
-    
-    public List<String> getOptions() {
-        return options != null ? Arrays.asList(options.split(",")) : null;
-    }
-    
-    public void setOptions(List<String> options) {
-        this.options = String.join(",", options);
-    }
+
+    @Column(name = "options")
+    private List<String> options;
 }
