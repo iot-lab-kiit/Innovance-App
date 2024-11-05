@@ -29,4 +29,11 @@ public class GlobalExceptionHandler {
                 .status(HttpStatus.NOT_FOUND)
                 .body(exception.getMessage());
     }
+
+    @ExceptionHandler(UserLevelChoiceNotFound.class)
+    public ResponseEntity<Object> handleUserLevelChoiceNotFoundException(UserLevelChoiceNotFound exception) {
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(exception.getMessage());
+    }
 }

@@ -1,6 +1,7 @@
 package in.iot.lab.innovance.entity;
 
 
+import in.iot.lab.innovance.dto.UserLevelChoiceDTO;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -35,4 +36,14 @@ public class UserLevelChoice {
 
     @Column(name = "selected")
     private Integer selected;
+
+    public UserLevelChoiceDTO toUserLevelChoiceDto() {
+        return UserLevelChoiceDTO
+                .builder()
+                .id(id)
+                .user(user.toUserDTO())
+                .level(level)
+                .selected(selected)
+                .build();
+    }
 }
