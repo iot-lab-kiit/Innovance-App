@@ -4,6 +4,7 @@ package in.iot.lab.innovance.service;
 import in.iot.lab.innovance.dto.UserDTO;
 import in.iot.lab.innovance.entity.User;
 import in.iot.lab.innovance.exception.UserNotFound;
+import in.iot.lab.innovance.repository.UserLevelChoiceRepository;
 import in.iot.lab.innovance.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -17,6 +18,7 @@ import java.util.List;
 public class UserService {
 
     private final UserRepository userRepo;
+    private final UserLevelChoiceRepository userLevelRepo;
 
     public UserDTO createUser(UserDTO user) {
         return userRepo
@@ -42,6 +44,7 @@ public class UserService {
         if (!userRepo.existsById(id))
             throw new UserNotFound(id);
 
+        userLevelRepo.deleteByUser_Id(id);
         userRepo.deleteById(id);
     }
 }

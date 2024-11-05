@@ -3,6 +3,7 @@ package in.iot.lab.innovance.service;
 import in.iot.lab.innovance.entity.Domain;
 import in.iot.lab.innovance.exception.DomainNotFound;
 import in.iot.lab.innovance.repository.DomainRepository;
+import in.iot.lab.innovance.repository.UserLevelChoiceRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +14,7 @@ import java.util.List;
 public class DomainService {
 
     private final DomainRepository domainRepo;
+    private final UserLevelChoiceRepository userLevelRepo;
 
     public Domain createDomain(Domain domain) {
         return domainRepo.save(domain);
@@ -35,9 +37,14 @@ public class DomainService {
     }
 
     public void deleteDomain(Integer id) {
-        if (!domainRepo.existsById(id))
-            throw new DomainNotFound(id);
 
+        // Fetching the Domain
+        Domain domain = domainRepo
+                .findById(id)
+                .orElseThrow(() -> new DomainNotFound(id));
+
+        // Manually deleting all the entries with the levels
+        domain.getLevels().forEach(level -> userLevelRepo.deleteByLevel_Id(level.getId()));
         domainRepo.deleteById(id);
     }
 }
