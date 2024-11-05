@@ -1,6 +1,7 @@
 package in.iot.lab.innovance.entity;
 
 
+import in.iot.lab.innovance.dto.UserDTO;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -22,7 +23,7 @@ public class User {
     @Column(name = "name")
     private String name;
 
-    @Column(name = "roll_no")
+    @Column(name = "roll_no", unique = true)
     private String rollNo;
 
     @ManyToOne(
@@ -31,4 +32,13 @@ public class User {
     )
     @JoinColumn(name = "domain_id")
     private Domain domain;
+
+    public UserDTO toUserDTO() {
+        return UserDTO
+                .builder()
+                .id(id)
+                .name(name)
+                .rollNo(rollNo)
+                .build();
+    }
 }
