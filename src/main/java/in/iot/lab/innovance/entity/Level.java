@@ -28,10 +28,4 @@ public class Level {
 
     @Column(name = "options")
     private List<String> options;
-
-    @ManyToOne(
-            cascade = {CascadeType.REFRESH, CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST},
-            fetch = FetchType.EAGER
-    )
-    private Domain domain;
 }

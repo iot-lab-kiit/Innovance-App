@@ -3,7 +3,7 @@ package in.iot.lab.innovance.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -24,24 +24,10 @@ public class Domain {
     private String name;
 
     @OneToMany(
-            mappedBy = "domain",
             fetch = FetchType.LAZY,
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
-    private List<Level> levels;
-
-    public void addLevel(Level level) {
-        if (!levels.contains(level)) {
-            levels.add(level);
-            level.setDomain(this);
-        }
-    }
-
-    public void removeLevel(Level level) {
-        if (levels.contains(level)) {
-            levels.remove(level);
-            level.setDomain(null);
-        }
-    }
+    @JoinColumn(name = "domain_id")
+    private Set<Level> levels;
 }
