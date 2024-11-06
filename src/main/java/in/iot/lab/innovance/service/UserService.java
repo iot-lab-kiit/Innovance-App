@@ -4,6 +4,7 @@ package in.iot.lab.innovance.service;
 import in.iot.lab.innovance.dto.UserDTO;
 import in.iot.lab.innovance.entity.Domain;
 import in.iot.lab.innovance.entity.User;
+import in.iot.lab.innovance.exception.DomainNotFound;
 import in.iot.lab.innovance.exception.UserNotFound;
 import in.iot.lab.innovance.repository.DomainRepository;
 import in.iot.lab.innovance.repository.UserLevelChoiceRepository;
@@ -20,22 +21,21 @@ import java.util.List;
 public class UserService {
 
     private final UserRepository userRepo;
+    private final DomainRepository domainRepo;
     private final UserLevelChoiceRepository userLevelRepo;
-    private final DomainRepository domainRepository;
-    
-    public UserDTO createUser(UserDTO userDTO) {
-        Domain domain = domainRepository.findById(userDTO.getDomainId())
-                .orElseThrow(() -> new RuntimeException("Domain not found"));
-        
-        User user = User.builder()
-                .name(userDTO.getName())
-                .rollNo(userDTO.getRollNo())
-                .domain(domain)
-                .build();
-        
-        user = userRepo.save(user);
 
-        return user.toUserDTO();
+    public UserDTO createUser(UserDTO user) {
+
+        Domain domain = domainRepo
+                .findById(user.getDomainId())
+                .orElseThrow(() -> new DomainNotFound(user.getDomainId()));
+
+        User newUser = user.toUser();
+        newUser.setDomain(domain);
+
+        return userRepo
+                .save(newUser)
+                .toUserDTO();
     }
     
     
