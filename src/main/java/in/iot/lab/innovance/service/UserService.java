@@ -37,7 +37,8 @@ public class UserService {
                 .save(newUser)
                 .toUserDTO();
     }
-
+    
+    
     public List<UserDTO> findAllUsers(Pageable pageable) {
         return userRepo
                 .findAll(pageable)
