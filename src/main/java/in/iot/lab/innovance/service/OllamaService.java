@@ -1,8 +1,8 @@
 package in.iot.lab.innovance.service;
 
 import in.iot.lab.innovance.dto.OllamaResponse;
-import in.iot.lab.innovance.dto.UserLevelChoiceDTO;
-import lombok.Getter;
+import in.iot.lab.innovance.entity.UserLevelChoice;
+import in.iot.lab.innovance.repository.UserLevelChoiceRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -16,6 +16,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class OllamaService {
     
+    private final UserLevelChoiceRepository userLevelRepo;
     private final WebClient webClient = WebClient.builder().baseUrl("http://localhost:11434").build();
     
     private final Map<String, String> domainPrompts = new HashMap<>() {{
@@ -23,10 +24,13 @@ public class OllamaService {
         put("Web Dev", "In the domain of Web Development, you chose '%s' for level %s. What are the implications of this choice in your projects?");
     }};
     
-    private String generatePrompt(List<UserLevelChoiceDTO> choices) {
+    private String generatePrompt(List<UserLevelChoice> choices) {
+        
+        String domainName = choices.getFirst().getUser().getDomain().getName();
+        
         StringBuilder promptBuilder = new StringBuilder();
         
-        for (UserLevelChoiceDTO choice : choices) {
+        for (UserLevelChoice choice : choices) {
             String optionsString = String.join(", ", choice.getLevel().getOptions());
             int selectedIndex = choice.getSelected();
             String selectedOption = (selectedIndex >= 0 && selectedIndex < choice.getLevel().getOptions().size())
@@ -34,18 +38,21 @@ public class OllamaService {
                     : "Invalid selection";
             
             String levelName = choice.getLevel().getQuestion();
-        
-            String domainPrompt = domainPrompts.getOrDefault(choice.getDomainName(),
+            
+            String domainPrompt = domainPrompts.getOrDefault(domainName,
                     "Based on your selection, provide insights regarding your choice.");
             
             promptBuilder.append(String.format(domainPrompt, selectedOption, levelName));
             promptBuilder.append(String.format(" Options available were [%s]. ", optionsString));
         }
-        System.out.printf("Given the user selections: %s, roast them as brutally as you can!%n", promptBuilder.toString());
-        return String.format("Given the user selections: %s, roast them as brutally as you can!", promptBuilder.toString());
+        System.out.printf("Given the user selections: %s, roast them as brutally as you can!%n", promptBuilder);
+        return String.format("Given the user selections: %s, roast them as brutally as you can!", promptBuilder);
     }
     
-    public Mono<String> getOllamaResponse(List<UserLevelChoiceDTO> choices) {
+    public Mono<String> getOllamaResponse(Integer userId) {
+        List<UserLevelChoice> choices = userLevelRepo
+                .findByUser_Id(userId);
+        
         String prompt = generatePrompt(choices);
         
         OllamaRequest requestBody = new OllamaRequest("llama3.2", prompt, false);
@@ -66,5 +73,4 @@ public class OllamaService {
     
     private record OllamaRequest(String model, String prompt, boolean stream) {
     }
-    
 }
