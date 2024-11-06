@@ -32,7 +32,6 @@ public class User {
             fetch = FetchType.EAGER
     )
     @JoinColumn(name = "domain_id")
-    @JsonIgnore
     private Domain domain;
 
     public UserDTO toUserDTO() {

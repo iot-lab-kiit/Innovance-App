@@ -62,12 +62,13 @@ public class UserLevelChoiceController {
         return ResponseEntity.ok().build();
     }
     
-    @PostMapping("/get-response")
-    public ResponseEntity<String> getAIResponseForChoice(@RequestBody List<UserLevelChoiceDTO> choices) {
-        return ollamaService.getOllamaResponse(choices)
+    @GetMapping("/get-response/{id}")
+    public ResponseEntity<String> getAIResponseForChoice(@PathVariable Integer id) {
+        return ollamaService.getOllamaResponse(id)
                 .map(ResponseEntity::ok)
                 .defaultIfEmpty(ResponseEntity.internalServerError().build())
                 .block();
     }
+    
     
 }
