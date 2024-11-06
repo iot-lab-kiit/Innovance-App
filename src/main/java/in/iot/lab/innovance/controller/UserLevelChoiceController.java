@@ -17,7 +17,6 @@ import java.util.List;
 public class UserLevelChoiceController {
 
     private final UserLevelChoiceService service;
-    private final OllamaService ollamaService;
 
     @PostMapping(UrlConstants.CREATE_USER_LEVEL_CHOICE)
     public ResponseEntity<UserLevelChoiceDTO> createUserLevelChoiceHandler(
@@ -61,14 +60,4 @@ public class UserLevelChoiceController {
         service.deleteUserLevelChoice(id);
         return ResponseEntity.ok().build();
     }
-    
-    @GetMapping("/get-response/{id}")
-    public ResponseEntity<String> getAIResponseForChoice(@PathVariable Integer id) {
-        return ollamaService.getOllamaResponse(id)
-                .map(ResponseEntity::ok)
-                .defaultIfEmpty(ResponseEntity.internalServerError().build())
-                .block();
-    }
-    
-    
 }
