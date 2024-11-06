@@ -15,4 +15,6 @@ public class UserLevelChoiceDTO {
     private UserDTO user;
     private Level level;
     private Integer selected;
+    
+    private String domainName;
 }

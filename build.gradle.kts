@@ -31,6 +31,12 @@ dependencies {
 	annotationProcessor("org.projectlombok:lombok")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+	// OkHttp
+	implementation("com.squareup.okhttp3:okhttp:4.12.0")
+	// WebFlux
+	implementation("org.springframework.boot:spring-boot-starter-webflux:3.3.5")
+
+
 }
 
 tasks.withType<Test> {

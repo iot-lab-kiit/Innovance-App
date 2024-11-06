@@ -1,5 +1,6 @@
 package in.iot.lab.innovance.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -28,4 +29,10 @@ public class Level {
 
     @Column(name = "options")
     private List<String> options;
+    
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "domain_id", insertable = false, updatable = false)
+    @JsonIgnore
+    private Domain domain;
+
 }

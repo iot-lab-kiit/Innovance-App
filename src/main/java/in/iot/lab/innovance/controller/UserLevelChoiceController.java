@@ -4,6 +4,7 @@ package in.iot.lab.innovance.controller;
 import in.iot.lab.innovance.constants.UrlConstants;
 import in.iot.lab.innovance.dto.PostUserChoiceRequest;
 import in.iot.lab.innovance.dto.UserLevelChoiceDTO;
+import in.iot.lab.innovance.service.OllamaService;
 import in.iot.lab.innovance.service.UserLevelChoiceService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +17,7 @@ import java.util.List;
 public class UserLevelChoiceController {
 
     private final UserLevelChoiceService service;
+    private final OllamaService ollamaService;
 
     @PostMapping(UrlConstants.CREATE_USER_LEVEL_CHOICE)
     public ResponseEntity<UserLevelChoiceDTO> createUserLevelChoiceHandler(
@@ -59,4 +61,13 @@ public class UserLevelChoiceController {
         service.deleteUserLevelChoice(id);
         return ResponseEntity.ok().build();
     }
+    
+    @PostMapping("/get-response")
+    public ResponseEntity<String> getAIResponseForChoice(@RequestBody List<UserLevelChoiceDTO> choices) {
+        return ollamaService.getOllamaResponse(choices)
+                .map(ResponseEntity::ok)
+                .defaultIfEmpty(ResponseEntity.internalServerError().build())
+                .block();
+    }
+    
 }
