@@ -37,7 +37,9 @@ dependencies {
 	// WebFlux
 	implementation("org.springframework.boot:spring-boot-starter-webflux:3.3.5")
 	// https://mvnrepository.com/artifact/com.mysql/mysql-connector-j
-	implementation("com.mysql:mysql-connector-j:9.1.0")
+//	implementation("com.mysql:mysql-connector-j:9.1.0")
+	implementation ("org.postgresql:postgresql:42.6.0")
+
 
 
 }
