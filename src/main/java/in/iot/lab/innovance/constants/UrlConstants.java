@@ -24,5 +24,5 @@ public class UrlConstants {
     public final static String DELETE_USER_LEVEL_CHOICE = "/user/choices/{id}";
     
     //Ollama URL
-    public final static String GET_RESPONSE_BY_AI = "/get-response/{id}";
+    public final static String GET_RESPONSE_BY_AI = "/api/v1/openai-response/{id}";
 }
