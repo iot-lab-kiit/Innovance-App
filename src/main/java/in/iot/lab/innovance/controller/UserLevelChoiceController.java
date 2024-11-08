@@ -4,7 +4,7 @@ package in.iot.lab.innovance.controller;
 import in.iot.lab.innovance.constants.UrlConstants;
 import in.iot.lab.innovance.dto.PostUserChoiceRequest;
 import in.iot.lab.innovance.dto.UserLevelChoiceDTO;
-import in.iot.lab.innovance.service.OllamaService;
+//import in.iot.lab.innovance.service.OllamaService;
 import in.iot.lab.innovance.service.UserLevelChoiceService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
