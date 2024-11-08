@@ -38,11 +38,6 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-webflux:3.3.5")
 	//Postgres
 	implementation ("org.postgresql:postgresql:42.6.0")
-	// Redis
-	implementation("org.springframework.boot:spring-boot-starter-data-redis:3.3.5")
-	// Redis Client
-	implementation("io.lettuce:lettuce-core:6.5.0.RELEASE")
-
 
 }
 

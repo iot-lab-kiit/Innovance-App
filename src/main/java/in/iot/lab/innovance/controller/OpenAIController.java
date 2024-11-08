@@ -9,13 +9,15 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
 
+import java.util.Map;
+
 @RestController
 @RequiredArgsConstructor
 public class OpenAIController {
     private final OpenAIService openAIService;
     
     @GetMapping(UrlConstants.GET_RESPONSE_BY_AI)
-    public Mono<ResponseEntity<String>> getAIResponseForChoice(@PathVariable Integer id) {
+    public Mono<ResponseEntity<Map<String, Object>>> getAIResponseForChoice(@PathVariable Integer id) {
         return openAIService.getOpenAIResponse(id)
                 .map(ResponseEntity::ok)
                 .defaultIfEmpty(ResponseEntity.internalServerError().build());

@@ -24,7 +24,7 @@ public class User {
     @Column(name = "name")
     private String name;
 
-    @Column(name = "roll_no")
+    @Column(name = "roll_no", unique = true)
     private String rollNo;
 
     @ManyToOne(
