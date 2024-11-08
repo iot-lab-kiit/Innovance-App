@@ -36,10 +36,12 @@ dependencies {
 	implementation("com.squareup.okhttp3:okhttp:4.12.0")
 	// WebFlux
 	implementation("org.springframework.boot:spring-boot-starter-webflux:3.3.5")
-	// https://mvnrepository.com/artifact/com.mysql/mysql-connector-j
-//	implementation("com.mysql:mysql-connector-j:9.1.0")
+	//Postgres
 	implementation ("org.postgresql:postgresql:42.6.0")
-
+	// Redis
+	implementation("org.springframework.boot:spring-boot-starter-data-redis:3.3.5")
+	// Redis Client
+	implementation("io.lettuce:lettuce-core:6.5.0.RELEASE")
 
 
 }
