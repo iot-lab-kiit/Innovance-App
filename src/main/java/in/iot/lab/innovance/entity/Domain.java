@@ -29,5 +29,6 @@ public class Domain {
             orphanRemoval = true
     )
     @JoinColumn(name = "domain_id")
+    @OrderBy("levelNo ASC")
     private Set<Level> levels;
 }

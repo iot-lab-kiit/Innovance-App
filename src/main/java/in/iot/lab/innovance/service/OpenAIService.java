@@ -13,7 +13,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -33,24 +35,35 @@ public class OpenAIService {
                 .build();
     }
     
-    public Mono<String> getOpenAIResponse(Integer userId) {
+    public Mono<Map<String, Object>> getOpenAIResponse(Integer userId) {
+        
         List<UserLevelChoice> choices = userLevelRepo.findByUser_Id(userId);
         if (choices.isEmpty()) {
             return Mono.error(new IllegalArgumentException("No choices found for user ID: " + userId));
         }
+        
         String prompt = PromptBuilder.buildPrompt(choices);
+        
         OpenAIRequest requestBody = new OpenAIRequest(
                 "gpt-4o-mini",
                 List.of(new Message("user", prompt)),
-                50);
+                500);
         
-        return getWebClient().post()
+        return getWebClient()
+                .post()
                 .bodyValue(requestBody)
                 .retrieve()
                 .bodyToMono(OpenAIResponse.class)
                 .flatMap(response -> {
                     if (response != null && response.getChoices() != null && !response.getChoices().isEmpty()) {
-                        return Mono.just(response.getChoices().getFirst().getMessage().getContent().trim());
+                        String responseContent = response.getChoices().get(0).getMessage().getContent();
+                        
+                        // Prepare JSON response
+                        Map<String, Object> jsonResponse = new HashMap<>();
+                        jsonResponse.put("status", "success");
+                        jsonResponse.put("data", responseContent);
+                        
+                        return Mono.just(jsonResponse);
                     } else {
                         return Mono.error(new RuntimeException("Received an empty response from OpenAI API"));
                     }
