@@ -1,13 +1,11 @@
 package in.iot.lab.innovance.service;
 
-import in.iot.lab.innovance.dto.Message;
-import in.iot.lab.innovance.dto.OpenAIRequest;
-import in.iot.lab.innovance.dto.OpenAIResponse;
+import in.iot.lab.innovance.dto.GeminiRequest;
+import in.iot.lab.innovance.dto.GeminiResponse;
 import in.iot.lab.innovance.entity.UserLevelChoice;
 import in.iot.lab.innovance.repository.UserLevelChoiceRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -19,23 +17,25 @@ import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
-public class OpenAIService {
+public class GeminiService {
     
     private final UserLevelChoiceRepository userLevelRepo;
     private final WebClient.Builder webClientBuilder;
     
-    @Value("${openai.api.key}")
-    private String openAIApiKey;
+    @Value("${gemini.api.key}")
+    private String geminiApiKey;
+    
+    @Value("${gemini.model}")
+    private String geminiModel;
     
     private WebClient getWebClient() {
+        // The correct URL format for Gemini API
         return webClientBuilder
-                .baseUrl("https://api.openai.com/v1/chat/completions")
-                .defaultHeader(HttpHeaders.AUTHORIZATION, "Bearer " + openAIApiKey)
-                .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                .baseUrl("https://generativelanguage.googleapis.com/v1/models/" + geminiModel + ":generateContent")
                 .build();
     }
     
-    public Mono<Map<String, Object>> getOpenAIResponse(Integer userId) {
+    public Mono<Map<String, Object>> getGeminiResponse(Integer userId) {
         
         List<UserLevelChoice> choices = userLevelRepo.findByUser_Id(userId);
         if (choices.isEmpty()) {
@@ -44,19 +44,18 @@ public class OpenAIService {
         
         String prompt = PromptBuilder.buildPrompt(choices);
         
-        OpenAIRequest requestBody = new OpenAIRequest(
-                "gpt-4o-mini",
-                List.of(new Message("user", prompt)),
-                500);
+        GeminiRequest requestBody = new GeminiRequest(prompt, 500);
         
         return getWebClient()
                 .post()
+                .uri(uriBuilder -> uriBuilder.queryParam("key", geminiApiKey).build())
+                .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue(requestBody)
                 .retrieve()
-                .bodyToMono(OpenAIResponse.class)
+                .bodyToMono(GeminiResponse.class)
                 .flatMap(response -> {
-                    if (response != null && response.getChoices() != null && !response.getChoices().isEmpty()) {
-                        String responseContent = response.getChoices().get(0).getMessage().getContent();
+                    if (response != null && response.getCandidates() != null && !response.getCandidates().isEmpty()) {
+                        String responseContent = response.getCandidates().getFirst().getContent().getParts().getFirst().getText();
                         
                         // Prepare JSON response
                         Map<String, Object> jsonResponse = new HashMap<>();
@@ -65,7 +64,7 @@ public class OpenAIService {
                         
                         return Mono.just(jsonResponse);
                     } else {
-                        return Mono.error(new RuntimeException("Received an empty response from OpenAI API"));
+                        return Mono.error(new RuntimeException("Received an empty response from Gemini API"));
                     }
                 });
     }

@@ -23,6 +23,6 @@ public class UrlConstants {
     public final static String FIND_USER_LEVEL_CHOICE_BY_USER_AND_LEVEL_ID = "/user/{userId}/choices/level/{levelId}";
     public final static String DELETE_USER_LEVEL_CHOICE = "/user/choices/{id}";
     
-    //Ollama URL
-    public final static String GET_RESPONSE_BY_AI = "/api/v1/openai-response/{id}";
+    //Gemini URL
+    public final static String GET_RESPONSE_BY_GEMINI_AI = "/api/v1/gemini-response/{id}";
 }
